@@ -37,15 +37,9 @@ async def main():
         default=DefaultBotProperties(parse_mode=ParseMode.HTML)
     )
     
-    # Storage для FSM (используем Memory, если Redis недоступен)
-    try:
-        storage = RedisStorage.from_url(
-            f"redis://{config.REDIS_HOST}:{config.REDIS_PORT}/{config.REDIS_DB}"
-        )
-        logger.info("Using Redis storage")
-    except Exception as e:
-        logger.warning(f"Redis unavailable, using Memory storage: {e}")
-        storage = MemoryStorage()
+    # Storage для FSM (используем Memory storage для бесплатного плана)
+    storage = MemoryStorage()
+    logger.info("Using Memory storage (Redis disabled)")
     
     dp = Dispatcher(storage=storage)
     
