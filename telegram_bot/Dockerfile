@@ -12,5 +12,8 @@ COPY . .
 # Создание директорий для логов
 RUN mkdir -p logs
 
-# Запуск бота
-CMD ["python", "bot/main.py"]
+# Добавляем /app в PYTHONPATH
+ENV PYTHONPATH=/app
+
+# Запуск бота из корня проекта
+CMD ["python", "-m", "bot.main"]
