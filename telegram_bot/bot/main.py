@@ -1,6 +1,8 @@
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
 from aiogram.fsm.storage.redis import RedisStorage
 from aiogram.fsm.storage.memory import MemoryStorage
 
@@ -30,7 +32,10 @@ async def main():
     config = Config()
     
     # Инициализация бота
-    bot = Bot(token=config.BOT_TOKEN, parse_mode="HTML")
+    bot = Bot(
+        token=config.BOT_TOKEN,
+        default=DefaultBotProperties(parse_mode=ParseMode.HTML)
+    )
     
     # Storage для FSM (используем Memory, если Redis недоступен)
     try:
