@@ -144,21 +144,27 @@ async def show_materials_by_format(callback: CallbackQuery, requires_subscriptio
 async def show_themes(callback: CallbackQuery):
     """Показать темы материалов"""
     
+    from bot.keyboards.inline import InlineKeyboardBuilder, InlineKeyboardButton
+    
+    builder = InlineKeyboardBuilder()
+    
+    # Добавляем кнопки для каждой темы
+    builder.row(InlineKeyboardButton(text="🧘 Позвоночник и осанка", callback_data="theme_back"))
+    builder.row(InlineKeyboardButton(text="🌬 Дыхательные практики", callback_data="theme_breathing"))
+    builder.row(InlineKeyboardButton(text="⚡ Работа с энергией", callback_data="theme_energy"))
+    builder.row(InlineKeyboardButton(text="😌 Снятие напряжения", callback_data="theme_relaxation"))
+    builder.row(InlineKeyboardButton(text="💪 Укрепление тела", callback_data="theme_strength"))
+    builder.row(InlineKeyboardButton(text="🔙 Назад", callback_data="materials"))
+    
     text = """
 📂 <b>Материалы по темам:</b>
 
-🧘 Позвоночник и осанка
-🌬 Дыхательные практики
-⚡ Работа с энергией
-😌 Снятие напряжения
-💪 Укрепление тела
-
-<i>Выберите тему в разделе "У меня проблема"</i>
+Выберите тему в разделе "У меня проблема" 👇
 """
     
     await callback.message.edit_text(
         text,
-        reply_markup=get_back_to_menu()
+        reply_markup=builder.as_markup()
     )
     
     await callback.answer()
@@ -216,6 +222,80 @@ async def show_search(callback: CallbackQuery):
     await callback.message.edit_text(
         text,
         reply_markup=get_back_to_menu()
+    )
+    
+    await callback.answer()
+
+
+@router.callback_query(F.data.startswith("theme_"))
+async def show_materials_by_theme(callback: CallbackQuery, requires_subscription: bool = False):
+    """Показать материалы выбранной темы"""
+    
+    theme = callback.data.split('_')[1]
+    user_id = callback.from_user.id
+    
+    # Проверяем подписку
+    has_access = sheets_manager.check_payment_status(user_id)
+    
+    if not has_access and requires_subscription:
+        await callback.message.edit_text(
+            SUBSCRIPTION_OFFER.format(price=config.SUBSCRIPTION_PRICE),
+            reply_markup=get_subscription_keyboard(config.SUBSCRIPTION_PRICE)
+        )
+        await callback.answer("🔒 Требуется подписка")
+        return
+    
+    # Маппинг тем на категории
+    theme_map = {
+        'back': '🧘 Позвоночник и осанка',
+        'breathing': '🌬 Дыхательные практики',
+        'energy': '⚡ Работа с энергией',
+        'relaxation': '😌 Снятие напряжения',
+        'strength': '💪 Укрепление тела'
+    }
+    
+    theme_title = theme_map.get(theme, 'Материалы')
+    
+    # Получаем материалы по теме (пока placeholder)
+    text = f"<b>{theme_title}</b>\n\n"
+    
+    # Фильтруем материалы по категории
+    found_materials = []
+    for format_type, materials_list in SAMPLE_MATERIALS.items():
+        for mat in materials_list:
+            if mat.get('category') == theme or theme == 'back':  # back показываем пока для примера
+                found_materials.append(mat)
+    
+    if found_materials:
+        text += "Доступные материалы:\n\n"
+        for mat in found_materials:
+            emoji = "🎥" if 'message_id' in mat else "📄"
+            text += f"{emoji} <b>{mat['title']}</b>\n"
+            text += f"<i>{mat['description']}</i>\n\n"
+    else:
+        text += "Материалы по этой теме скоро появятся! 🎬\n\n"
+    
+    if has_access:
+        text += "✅ У вас есть доступ ко всем материалам!"
+    else:
+        text += "🔒 Для доступа нужна подписка"
+    
+    from bot.keyboards.inline import InlineKeyboardBuilder, InlineKeyboardButton
+    builder = InlineKeyboardBuilder()
+    
+    # Добавляем кнопки материалов если есть доступ
+    if has_access and found_materials:
+        for mat in found_materials[:3]:  # Показываем первые 3
+            builder.row(InlineKeyboardButton(
+                text=f"📥 {mat['title'][:30]}...", 
+                callback_data=f"get_material_{mat['id']}"
+            ))
+    
+    builder.row(InlineKeyboardButton(text="🔙 Назад к темам", callback_data="materials_theme"))
+    
+    await callback.message.edit_text(
+        text,
+        reply_markup=builder.as_markup()
     )
     
     await callback.answer()
