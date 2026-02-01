@@ -5,7 +5,7 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
 
-from bot.keyboards.inline import get_admin_keyboard, get_back_to_menu
+from bot.keyboards.inline import get_admin_keyboard, get_back_button
 from bot.database.sheets import sheets_manager
 from bot.filters.admin import IsAdmin
 
@@ -68,7 +68,7 @@ async def show_stats(callback: CallbackQuery):
     
     await callback.message.edit_text(
         text,
-        reply_markup=get_back_to_menu()
+        reply_markup=get_back_button("menu")
     )
     
     await callback.answer()
@@ -106,7 +106,7 @@ async def show_users(callback: CallbackQuery):
     
     await callback.message.edit_text(
         text,
-        reply_markup=get_back_to_menu()
+        reply_markup=get_back_button("menu")
     )
     
     await callback.answer()
@@ -127,7 +127,7 @@ async def show_broadcast(callback: CallbackQuery):
     
     await callback.message.edit_text(
         text,
-        reply_markup=get_back_to_menu()
+        reply_markup=get_back_button("menu")
     )
     
     await callback.answer()
