@@ -104,11 +104,11 @@ def get_info_menu() -> InlineKeyboardMarkup:
     builder.row(InlineKeyboardButton(text="👤 Об авторе", callback_data="info_author"))
     builder.row(InlineKeyboardButton(
         text="📢 Telegram-канал Recovery Lab",
-        url="https://t.me/your_channel"  # ЗАМЕНИТЬ НА РЕАЛЬНЫЙ
+        url="https://t.me/+x6O0l82YAbg3MmJi"  # ЗАМЕНИТЬ НА РЕАЛЬНЫЙ
     ))
     builder.row(InlineKeyboardButton(
         text="💬 Чат Recovery Lab",
-        url="https://t.me/your_chat"  # ЗАМЕНИТЬ НА РЕАЛЬНЫЙ
+        url="https://t.me/+ZFkkMxkM4PsyNWFi"  # ЗАМЕНИТЬ НА РЕАЛЬНЫЙ
     ))
     builder.row(InlineKeyboardButton(text="🏠 Главное меню", callback_data="menu"))
     
