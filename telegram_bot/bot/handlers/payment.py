@@ -9,7 +9,7 @@ from bot.keyboards.inline import (
     get_subscription_keyboard, get_payment_keyboard, get_main_menu
 )
 from bot.utils.texts import (
-    SUBSCRIPTION_OFFER, PAYMENT_SUCCESS, PAYMENT_REMINDER
+    SUBSCRIPTION_OFFER, SUBSCRIPTION_SUCCESS, PAYMENT_REMINDER
 )
 from bot.database.sheets import sheets_manager
 from config.config import Config
