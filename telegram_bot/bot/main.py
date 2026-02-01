@@ -3,10 +3,9 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from aiogram.fsm.storage.redis import RedisStorage
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from bot.handlers import start, menu, materials, problems, payment, contacts, booking, reviews, admin
+from bot.handlers import start, menu, labs, payment, info, admin
 from bot.middlewares.subscription import SubscriptionMiddleware
 from bot.middlewares.logging import LoggingMiddleware
 from bot.middlewares.throttling import ThrottlingMiddleware
@@ -54,12 +53,9 @@ async def main():
     # Регистрация handlers
     dp.include_router(start.router)
     dp.include_router(menu.router)
-    dp.include_router(materials.router)
-    dp.include_router(problems.router)
+    dp.include_router(labs.router)
     dp.include_router(payment.router)
-    dp.include_router(contacts.router)
-    dp.include_router(booking.router)
-    dp.include_router(reviews.router)
+    dp.include_router(info.router)
     dp.include_router(admin.router)
     
     logger.info("Bot started successfully")

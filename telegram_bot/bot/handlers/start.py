@@ -49,22 +49,10 @@ async def cmd_start(message: Message):
     # Отправляем текст приветствия
     await message.answer(welcome_text)
     
-    # Небольшая задержка и показываем главное меню
+    # Показываем главное меню
     await message.answer(
         MAIN_MENU_TEXT,
         reply_markup=get_main_menu()
     )
     
     logger.info(f"New user started bot: {user.id} (@{user.username})")
-
-
-@router.callback_query(F.data == "menu")
-async def show_menu(callback: CallbackQuery):
-    """Показать главное меню"""
-    
-    await callback.message.edit_text(
-        MAIN_MENU_TEXT,
-        reply_markup=get_main_menu()
-    )
-    
-    await callback.answer()
