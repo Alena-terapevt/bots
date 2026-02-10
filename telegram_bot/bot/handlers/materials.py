@@ -33,6 +33,19 @@ SAMPLE_MATERIALS = {
             'message_id': 2,  # ID сообщения в канале
             'category': 'back'
         },
+practices = [
+    {
+        'id': 1,
+        'title': 'Приветствие',
+        'message_id': 5,  # ID сообщения в канале
+        'category': 'breath_recovery'
+    }
+]
+
+
+
+
+        
         # Добавь сюда больше видео по мере загрузки
         # {
         #     'id': 2,
