@@ -38,7 +38,7 @@ practices = [
         'id': 1,
         'title': 'Приветствие',
         'message_id': 5,  # ID сообщения в канале
-        'category': 'breath_recovery'
+        'category': 'body_belly'
     }
 ]
 
